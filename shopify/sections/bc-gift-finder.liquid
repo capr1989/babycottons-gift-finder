@@ -1,0 +1,372 @@
+{{ 'bc-gift-finder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bc-gift-finder.js' | asset_url }}" defer></script>
+<section class="bc-gift-finder" data-bc-gift-finder
+  style="--bc-ink:{{ section.settings.ink }};--bc-surface:{{ section.settings.surface }};--bc-accent:{{ section.settings.accent }}"
+  aria-labelledby="bc-title-{{ section.id }}"
+  data-config-error="{{ section.settings.config_error | escape }}"
+  data-available="{{ section.settings.available | escape }}"
+  data-empty="{{ section.settings.empty | escape }}"
+  data-initial="{{ section.settings.initial | escape }}"
+  data-results="{{ section.settings.results_count | escape }}">
+  <div class="bc-gift-finder__inner">
+    <header class="bc-gift-finder__hero">
+      <svg class="bc-gift-finder__ribbon" viewBox="0 0 56 40" fill="none" aria-hidden="true" focusable="false"><path d="M28 19C6 21 7 0 19 6c6 3 9 13 9 13Zm0 0C50 21 49 0 37 6c-6 3-9 13-9 13Zm0 0L15 37m13-18 13 18M7 21h42" stroke="currentColor" stroke-width="1.5"/></svg>
+      <h1 id="bc-title-{{ section.id }}" class="Heading">{{ section.settings.title | escape }}</h1>
+      <p>{{ section.settings.subtitle | escape }}</p>
+      {% if section.settings.hero_image %}{{ section.settings.hero_image | image_url: width: 1600 | image_tag: widths: '400,800,1200,1600', sizes: '(min-width: 900px) 800px, 100vw', loading: 'eager' }}{% endif %}
+    </header>
+    <form class="bc-gift-finder__form" hidden>
+      <fieldset><legend>{{ section.settings.budget_label | escape }}</legend><div class="bc-gift-finder__choices">
+        {% assign budgets = '25-50,50-75,75-100,100+' | split: ',' %}
+        {% for budget in budgets %}{% assign key = 'budget_' | append: forloop.index %}<label class="bc-gift-finder__choice"><input type="radio" name="budget" value="{{ budget }}" required><span>{{ section.settings[key] | escape }}</span></label>{% endfor %}
+      </div></fieldset>
+      <fieldset><legend>{{ section.settings.age_label | escape }}</legend><div class="bc-gift-finder__choices">
+        {% assign ages = 'newborn,0-3,3-12,1-5,5-10' | split: ',' %}
+        {% for age in ages %}{% assign key = 'age_' | append: forloop.index %}<label class="bc-gift-finder__choice"><input type="radio" name="age" value="{{ age }}" required><span>{{ section.settings[key] | escape }}</span></label>{% endfor %}
+      </div></fieldset>
+      <fieldset><legend>{{ section.settings.category_label | escape }}</legend><div class="bc-gift-finder__choices">
+        {% assign categories = 'surprise,pajamas,clothing,blankets,accessories,sets' | split: ',' %}
+        {% for category in categories %}{% assign key = 'category_' | append: forloop.index %}<label class="bc-gift-finder__choice"><input type="radio" name="category" value="{{ category }}" required{% if forloop.first %} checked{% endif %}><span>{{ section.settings[key] | escape }}</span></label>{% endfor %}
+      </div></fieldset>
+      <div class="bc-gift-finder__actions"><button class="bc-gift-finder__submit" type="submit">{{ section.settings.submit | escape }}</button><button class="bc-gift-finder__reset" type="reset">{{ section.settings.reset | escape }}</button></div>
+    </form>
+    <noscript><p>{{ section.settings.no_js | escape }}</p></noscript>
+    <div class="bc-gift-finder__results-header"><h2 class="Heading">{{ section.settings.results_title | escape }}</h2><p>{{ section.settings.results_subtitle | escape }}</p></div>
+    <p class="bc-gift-finder__status" data-bc-status role="status" aria-live="polite" aria-atomic="true">{{ section.settings.initial | escape }}</p>
+    <ul class="bc-gift-finder__grid" data-bc-results role="list"></ul>
+    {% capture finder_data %}
+      {"currency":{{ cart.currency.iso_code | default: shop.currency | json }},"products":[
+      {% assign candidate_count = 0 %}
+      {% if section.settings.source_collection != blank %}
+        {% for candidate in section.settings.source_collection.products limit: 50 %}
+          {% if candidate.tags contains 'gift_shop' %}
+            {% assign mapping = nil %}{% for block in section.blocks %}{% if block.settings.product.id == candidate.id %}{% assign mapping = block %}{% break %}{% endif %}{% endfor %}
+            {% if candidate_count > 0 %},{% endif %}{% render 'bc-gift-data', candidate: candidate, mapping: mapping %}{% assign candidate_count = candidate_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for block in section.blocks limit: 50 %}
+          {% assign candidate = block.settings.product %}
+          {% if candidate != blank and candidate.tags contains 'gift_shop' %}
+            {% if candidate_count > 0 %},{% endif %}{% render 'bc-gift-data', candidate: candidate, mapping: block %}{% assign candidate_count = candidate_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      ]}
+    {% endcapture %}
+    <script type="application/json" data-bc-data>{{ finder_data | replace: '<', '\u003c' }}</script>
+    <script type="application/json" data-bc-size-map>{{ section.settings.size_map | json | replace: '<', '\u003c' }}</script>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Little Gift Guide",
+  "tag": "section",
+  "class": "bc-gift-finder-section",
+  "max_blocks": 50,
+  "settings": [
+    {
+      "type": "collection",
+      "id": "source_collection",
+      "label": "Colección de candidatos",
+      "info": "Opcional: primeros 50 productos, orden de la colección. Solo se admiten productos con gift_shop. Sin colección se usan los bloques."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen del hero"
+    },
+    {
+      "type": "color",
+      "id": "ink",
+      "label": "Texto y botones",
+      "default": "#604c43"
+    },
+    {
+      "type": "color",
+      "id": "surface",
+      "label": "Fondo",
+      "default": "#fbf6ee"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Selección",
+      "default": "#ead0cc"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "title",
+      "default": "The Little Gift Guide"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "subtitle",
+      "default": "Find the perfect little gift"
+    },
+    {
+      "type": "text",
+      "id": "budget_label",
+      "label": "budget label",
+      "default": "Step 1 — Choose your budget"
+    },
+    {
+      "type": "text",
+      "id": "budget_1",
+      "label": "budget 1",
+      "default": "$25–$50"
+    },
+    {
+      "type": "text",
+      "id": "budget_2",
+      "label": "budget 2",
+      "default": "$50–$75"
+    },
+    {
+      "type": "text",
+      "id": "budget_3",
+      "label": "budget 3",
+      "default": "$75–$100"
+    },
+    {
+      "type": "text",
+      "id": "budget_4",
+      "label": "budget 4",
+      "default": "$100+"
+    },
+    {
+      "type": "text",
+      "id": "age_label",
+      "label": "age label",
+      "default": "Step 2 — How old is the little one?"
+    },
+    {
+      "type": "text",
+      "id": "age_1",
+      "label": "age 1",
+      "default": "Newborn"
+    },
+    {
+      "type": "text",
+      "id": "age_2",
+      "label": "age 2",
+      "default": "0–3 months"
+    },
+    {
+      "type": "text",
+      "id": "age_3",
+      "label": "age 3",
+      "default": "3–12 months"
+    },
+    {
+      "type": "text",
+      "id": "age_4",
+      "label": "age 4",
+      "default": "1–5 years"
+    },
+    {
+      "type": "text",
+      "id": "age_5",
+      "label": "age 5",
+      "default": "5–10 years"
+    },
+    {
+      "type": "text",
+      "id": "category_label",
+      "label": "category label",
+      "default": "Step 3 — Pick a little something"
+    },
+    {
+      "type": "text",
+      "id": "category_1",
+      "label": "category 1",
+      "default": "Surprise me"
+    },
+    {
+      "type": "text",
+      "id": "category_2",
+      "label": "category 2",
+      "default": "Pajamas"
+    },
+    {
+      "type": "text",
+      "id": "category_3",
+      "label": "category 3",
+      "default": "Clothing"
+    },
+    {
+      "type": "text",
+      "id": "category_4",
+      "label": "category 4",
+      "default": "Blankets"
+    },
+    {
+      "type": "text",
+      "id": "category_5",
+      "label": "category 5",
+      "default": "Accessories"
+    },
+    {
+      "type": "text",
+      "id": "category_6",
+      "label": "category 6",
+      "default": "Gift sets"
+    },
+    {
+      "type": "text",
+      "id": "submit",
+      "label": "submit",
+      "default": "Find My Gift →"
+    },
+    {
+      "type": "text",
+      "id": "reset",
+      "label": "reset",
+      "default": "Start again"
+    },
+    {
+      "type": "text",
+      "id": "results_title",
+      "label": "results title",
+      "default": "Gift Ideas We Love"
+    },
+    {
+      "type": "text",
+      "id": "results_subtitle",
+      "label": "results subtitle",
+      "default": "A few handpicked favorites, perfect for gifting."
+    },
+    {
+      "type": "text",
+      "id": "initial",
+      "label": "initial",
+      "default": "Choose a budget and age to discover a little gift."
+    },
+    {
+      "type": "text",
+      "id": "empty",
+      "label": "empty",
+      "default": "No little gifts match this selection yet. Try another combination."
+    },
+    {
+      "type": "text",
+      "id": "results_count",
+      "label": "results count",
+      "default": "[count] little gifts found."
+    },
+    {
+      "type": "text",
+      "id": "available",
+      "label": "available",
+      "default": "Available"
+    },
+    {
+      "type": "text",
+      "id": "config_error",
+      "label": "config error",
+      "default": "The gift guide is temporarily unavailable. Please try again later."
+    },
+    {
+      "type": "text",
+      "id": "no_js",
+      "label": "no js",
+      "default": "Please enable JavaScript to use the gift guide."
+    },
+    {
+      "type": "textarea",
+      "id": "size_map",
+      "label": "Equivalencias de talla a edad (JSON)",
+      "default": "{\"nb\":[\"newborn\"],\"3m\":[\"0-3\"],\"6m\":[\"3-12\"],\"9m\":[\"3-12\"],\"12m\":[\"1-5\"],\"18m\":[\"1-5\"],\"24m\":[\"1-5\"],\"3t\":[\"1-5\"],\"4t\":[\"1-5\"],\"6t\":[\"5-10\"],\"8t\":[\"5-10\"],\"10t\":[\"5-10\"]}",
+      "info": "Claves exactas en minúscula. No mapear números de anillos. Edades: newborn, 0-3, 3-12, 1-5, 5-10. 12m se asigna a 1-5."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_mapping",
+      "name": "Producto / equivalencias",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Producto con gift_shop"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Categoría",
+          "default": "auto",
+          "options": [
+            {
+              "value": "auto",
+              "label": "Automática"
+            },
+            {
+              "value": "pajamas",
+              "label": "Pijamas"
+            },
+            {
+              "value": "clothing",
+              "label": "Ropa"
+            },
+            {
+              "value": "blankets",
+              "label": "Mantas"
+            },
+            {
+              "value": "accessories",
+              "label": "Accesorios"
+            },
+            {
+              "value": "sets",
+              "label": "Sets de regalo"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "sizeless",
+          "label": "Producto sin talla: usar edades aprobadas",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "age_1",
+          "label": "Aprobar: Recién nacido",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "age_2",
+          "label": "Aprobar: 0–3 meses",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "age_3",
+          "label": "Aprobar: 3–12 meses",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "age_4",
+          "label": "Aprobar: 1–5 años",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "age_5",
+          "label": "Aprobar: 5–10 años",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Little Gift Guide"
+    }
+  ]
+}
+{% endschema %}
