@@ -1,7 +1,7 @@
 # Babycottons — The Little Gift Guide
 
-Custom Liquid, CSS and vanilla JavaScript extension for Prestige 4.7.2. Public repository explicitly authorized by the owner on 2026-11-14. No commercial Prestige theme source, credentials or customer data is included.
+Custom Liquid, isolated CSS and vanilla JavaScript extension for Prestige 4.7.2. Public repository authorized by the project owner. No commercial theme source, credentials or customer data is included.
 
-Development theme: 168685011176 (unpublished). Production activation and global store changes require separate approval. Shopify and GitHub operations use connected MCP tools exclusively.
+Source, tests and documentation are on [feature/gift-finder](https://github.com/capr1989/babycottons-gift-finder/tree/feature/gift-finder).
 
-Implementation, tests and documentation will be maintained on feature/gift-finder. No production publication is authorized.
+Install only on an unpublished theme. Production activation and global store changes require separate approval. Shopify and GitHub operations use connected MCP tools exclusively.
