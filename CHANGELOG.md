@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+- Apply owner-requested white background and #a7c2c5 text in section defaults and the public empty template.
+- Keep focus and control borders darker; document the requested text contrast limitation (1.88:1).
+- Retain store-specific candidate selections exclusively in the local operational delivery and unpublished development theme.
+
 ## 0.1.0
 
 - Custom Gift Finder section, isolated CSS and vanilla JavaScript.

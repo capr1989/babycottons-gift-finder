@@ -37,5 +37,10 @@ for (const rule of css.matchAll(/([^{}]+)\{/g)) {
 }
 const rgb = hex => hex.match(/\w\w/g).map(x => parseInt(x, 16) / 255).map(x => x <= .04045 ? x / 12.92 : ((x + .055) / 1.055) ** 2.4);
 const luminance = hex => rgb(hex).reduce((a, x, i) => a + x * [.2126, .7152, .0722][i], 0);
-for (const surface of ['fbf6ee', 'fffdf9', 'ead0cc']) assert((luminance(surface) + .05) / (luminance('604c43') + .05) >= 4.5);
-console.log('PASS JS syntax, section schema, template, settings wiring, Liquid block balance, CSS scope, default text contrast and JSON escaping');
+assert.equal(schema.settings.find(s => s.id === 'ink').default, '#a7c2c5');
+assert.equal(schema.settings.find(s => s.id === 'surface').default, '#ffffff');
+assert(css.includes('--bc-control:#567477'));
+assert((luminance('ffffff') + .05) / (luminance('567477') + .05) >= 3);
+console.log('PASS JS syntax, section schema, template, settings wiring, Liquid block balance, CSS scope, requested colors, control contrast and JSON escaping');
+console.log('NOTE requested text color on white contrast: ' + ((luminance('ffffff') + .05) / (luminance('a7c2c5') + .05)).toFixed(2) + ':1; below WCAG AA text minimum');
+
