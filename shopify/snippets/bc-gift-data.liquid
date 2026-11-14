@@ -1,0 +1,35 @@
+{% doc %}
+Serializes one curated product using live storefront variant prices and availability.
+@param {product} candidate - Product to serialize
+@param {block} [mapping] - Optional theme-only age/category override
+{% enddoc %}
+{
+  "id": {{ candidate.id | append: '' | json }},
+  "title": {{ candidate.title | json }},
+  "url": {{ candidate.url | json }},
+  "tags": {{ candidate.tags | json }},
+  "category": {{ mapping.settings.category | default: 'auto' | json }},
+  "sizeless": {% if mapping.settings.sizeless %}true{% else %}false{% endif %},
+  "approvedAges": [{% assign age_comma = '' %}{% assign age_keys = 'newborn,0-3,3-12,1-5,5-10' | split: ',' %}{% for age_key in age_keys %}{% assign age_setting = 'age_' | append: forloop.index %}{% if mapping.settings[age_setting] %}{{ age_comma }}{{ age_key | json }}{% assign age_comma = ',' %}{% endif %}{% endfor %}],
+  "image": {% if candidate.featured_image %}{{ candidate.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
+  "alt": {{ candidate.featured_image.alt | default: candidate.title | json }},
+  "variants": [
+    {% assign size_position = 0 %}
+    {% for option in candidate.options_with_values %}
+      {% assign option_name = option.name | downcase | strip %}
+      {% if option_name == 'talla' or option_name == 'size' or option_name == 'tamaño' %}{% assign size_position = forloop.index %}{% endif %}
+    {% endfor %}
+    {% for variant in candidate.variants limit: 50 %}
+      {% assign size_value = '' %}
+      {% if size_position > 0 %}{% assign size_index = size_position | minus: 1 %}{% assign size_value = variant.options[size_index] %}{% endif %}
+      {
+        "id": {{ variant.id | append: '' | json }},
+        "title": {{ variant.title | json }},
+        "size": {{ size_value | json }},
+        "available": {{ variant.available | json }},
+        "price": {{ variant.price | json }},
+        "formattedPrice": {{ variant.price | money_with_currency | strip_html | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}

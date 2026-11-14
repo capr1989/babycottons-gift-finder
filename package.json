@@ -1,0 +1,7 @@
+{
+  "name": "babycottons-gift-finder",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "test": "node tests/filter.test.cjs && node tests/static.test.cjs" },
+  "engines": { "node": ">=18" }
+}

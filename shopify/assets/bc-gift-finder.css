@@ -1,0 +1,36 @@
+.bc-gift-finder{--bc-ink:#a7c2c5;--bc-surface:#ffffff;--bc-accent:#eef4f4;--bc-control:#567477;color:var(--bc-ink);background:var(--bc-surface);padding:48px 20px 64px;font-size:16px;line-height:1.6}
+.bc-gift-finder *{box-sizing:border-box}
+.bc-gift-finder [hidden]{display:none!important}
+.bc-gift-finder__inner{max-width:1160px;margin:auto}
+.bc-gift-finder__hero{text-align:center;max-width:800px;margin:0 auto 36px}
+.bc-gift-finder__hero h1{font-size:clamp(30px,5vw,56px);line-height:1.12;letter-spacing:.01em;text-transform:none;text-wrap:balance;color:inherit;margin:16px 0}
+.bc-gift-finder__hero p{margin:12px auto;max-width:48ch}
+.bc-gift-finder__hero img{width:100%;max-height:360px;object-fit:cover;border-radius:12px;display:block;margin:24px auto}
+.bc-gift-finder__ribbon{width:56px;height:40px;display:block;margin:auto;color:inherit}
+.bc-gift-finder__form{background:#ffffff;border:1px solid var(--bc-control);border-radius:18px;padding:24px;max-width:960px;margin:auto;box-shadow:0 8px 28px #604c430a}
+.bc-gift-finder fieldset{border:0;padding:0;margin:0 0 26px;min-width:0}
+.bc-gift-finder legend{font-weight:700;font-size:17px;float:none;width:auto;padding:0;margin-bottom:12px;color:inherit}
+.bc-gift-finder__choices{display:flex;flex-wrap:wrap;gap:10px}
+.bc-gift-finder__choice{position:relative;flex:1 1 125px;cursor:pointer}
+.bc-gift-finder__choice input{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);opacity:0}
+.bc-gift-finder__choice span{display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid var(--bc-control);border-radius:9px;padding:10px 12px;text-align:center;font-size:14px;line-height:1.4}
+.bc-gift-finder__choice input:checked+span{background:var(--bc-accent);border:2px solid var(--bc-control);padding:9px 11px;font-weight:700}
+.bc-gift-finder__choice input:focus-visible+span,.bc-gift-finder button:focus-visible,.bc-gift-finder a:focus-visible{outline:3px solid var(--bc-control);outline-offset:4px}
+.bc-gift-finder__actions{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+.bc-gift-finder button{min-height:48px;cursor:pointer;font:inherit;border-radius:9px;padding:12px 24px}
+.bc-gift-finder__submit{border:2px solid var(--bc-control);background:#ffffff;color:var(--bc-ink);font-weight:700}
+.bc-gift-finder__reset{border:1px solid var(--bc-control);background:transparent;color:inherit}
+.bc-gift-finder__results-header{text-align:center;margin:48px auto 24px;max-width:650px}
+.bc-gift-finder__results-header h2{font-size:clamp(24px,3vw,36px);line-height:1.2;text-transform:none;letter-spacing:.01em;color:inherit;margin:0 0 12px}
+.bc-gift-finder__status{min-height:28px;text-align:center;margin:20px auto;max-width:65ch}
+.bc-gift-finder__grid{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+.bc-gift-finder__card{min-width:0;text-align:center;background:#ffffff;border-radius:12px;overflow:hidden}
+.bc-gift-finder__card a{display:block;padding:12px 12px 20px;color:inherit;text-decoration:none;height:100%}
+.bc-gift-finder__card img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;display:block;background:#fff;border-radius:8px;margin-bottom:18px}
+.bc-gift-finder__card h3{font-size:15px;text-transform:none;letter-spacing:.01em;line-height:1.5;margin:0 0 8px;color:inherit;overflow-wrap:anywhere}
+.bc-gift-finder__price{font-weight:700;margin:4px 0}
+.bc-gift-finder__variant,.bc-gift-finder__availability{font-size:13px;margin:4px 0}
+.bc-gift-finder__availability{display:block}
+@media(min-width:768px){.bc-gift-finder{padding:72px 40px 88px}.bc-gift-finder__form{padding:36px 40px}.bc-gift-finder__grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}.bc-gift-finder__choice{flex-grow:0;min-width:128px}}
+@media(max-width:359px){.bc-gift-finder__grid{grid-template-columns:1fr}}
+

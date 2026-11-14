@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "bc-gift-finder",
+      "settings": {
+        "ink": "#a7c2c5",
+        "surface": "#ffffff",
+        "accent": "#eef4f4"
+      },
+      "blocks": {},
+      "block_order": []
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
