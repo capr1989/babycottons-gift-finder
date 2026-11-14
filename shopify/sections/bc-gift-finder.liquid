@@ -10,7 +10,9 @@
   data-results="{{ section.settings.results_count | escape }}">
   <div class="bc-gift-finder__inner">
     <header class="bc-gift-finder__hero">
+      {% if section.settings.show_ribbon %}
       <svg class="bc-gift-finder__ribbon" viewBox="0 0 56 40" fill="none" aria-hidden="true" focusable="false"><path d="M28 19C6 21 7 0 19 6c6 3 9 13 9 13Zm0 0C50 21 49 0 37 6c-6 3-9 13-9 13Zm0 0L15 37m13-18 13 18M7 21h42" stroke="currentColor" stroke-width="1.5"/></svg>
+      {% endif %}
       <h1 id="bc-title-{{ section.id }}" class="Heading">{{ section.settings.title | escape }}</h1>
       <p>{{ section.settings.subtitle | escape }}</p>
       {% if section.settings.hero_image %}{{ section.settings.hero_image | image_url: width: 1600 | image_tag: widths: '400,800,1200,1600', sizes: '(min-width: 900px) 800px, 100vw', loading: 'eager' }}{% endif %}
@@ -66,6 +68,12 @@
   "max_blocks": 50,
   "settings": [
     {
+      "type": "checkbox",
+      "id": "show_ribbon",
+      "label": "Mostrar lazo decorativo",
+      "default": false
+    },
+    {
       "type": "collection",
       "id": "source_collection",
       "label": "Colección de candidatos",
@@ -97,181 +105,181 @@
     {
       "type": "text",
       "id": "title",
-      "label": "title",
+      "label": "Título principal",
       "default": "The Little Gift Guide"
     },
     {
       "type": "text",
       "id": "subtitle",
-      "label": "subtitle",
+      "label": "Subtítulo principal",
       "default": "Find the perfect little gift"
     },
     {
       "type": "text",
       "id": "budget_label",
-      "label": "budget label",
+      "label": "Encabezado del filtro de presupuesto",
       "default": "Step 1 — Choose your budget"
     },
     {
       "type": "text",
       "id": "budget_1",
-      "label": "budget 1",
+      "label": "Texto visible: $25–$50",
       "default": "$25–$50"
     },
     {
       "type": "text",
       "id": "budget_2",
-      "label": "budget 2",
+      "label": "Texto visible: $50–$75",
       "default": "$50–$75"
     },
     {
       "type": "text",
       "id": "budget_3",
-      "label": "budget 3",
+      "label": "Texto visible: $75–$100",
       "default": "$75–$100"
     },
     {
       "type": "text",
       "id": "budget_4",
-      "label": "budget 4",
+      "label": "Texto visible: $100+",
       "default": "$100+"
     },
     {
       "type": "text",
       "id": "age_label",
-      "label": "age label",
+      "label": "Encabezado del filtro de edad",
       "default": "Step 2 — How old is the little one?"
     },
     {
       "type": "text",
       "id": "age_1",
-      "label": "age 1",
+      "label": "Texto visible: Recién nacido",
       "default": "Newborn"
     },
     {
       "type": "text",
       "id": "age_2",
-      "label": "age 2",
+      "label": "Texto visible: 0–3 meses",
       "default": "0–3 months"
     },
     {
       "type": "text",
       "id": "age_3",
-      "label": "age 3",
+      "label": "Texto visible: 3–12 meses",
       "default": "3–12 months"
     },
     {
       "type": "text",
       "id": "age_4",
-      "label": "age 4",
+      "label": "Texto visible: 1–5 años",
       "default": "1–5 years"
     },
     {
       "type": "text",
       "id": "age_5",
-      "label": "age 5",
+      "label": "Texto visible: 5–10 años",
       "default": "5–10 years"
     },
     {
       "type": "text",
       "id": "category_label",
-      "label": "category label",
+      "label": "Encabezado del filtro de categoría",
       "default": "Step 3 — Pick a little something"
     },
     {
       "type": "text",
       "id": "category_1",
-      "label": "category 1",
+      "label": "Texto visible: Surprise me",
       "default": "Surprise me"
     },
     {
       "type": "text",
       "id": "category_2",
-      "label": "category 2",
+      "label": "Texto visible: Pijamas",
       "default": "Pajamas"
     },
     {
       "type": "text",
       "id": "category_3",
-      "label": "category 3",
+      "label": "Texto visible: Ropa",
       "default": "Clothing"
     },
     {
       "type": "text",
       "id": "category_4",
-      "label": "category 4",
+      "label": "Texto visible: Mantas",
       "default": "Blankets"
     },
     {
       "type": "text",
       "id": "category_5",
-      "label": "category 5",
+      "label": "Texto visible: Accesorios",
       "default": "Accessories"
     },
     {
       "type": "text",
       "id": "category_6",
-      "label": "category 6",
+      "label": "Texto visible: Sets de regalo",
       "default": "Gift sets"
     },
     {
       "type": "text",
       "id": "submit",
-      "label": "submit",
+      "label": "Texto del botón de búsqueda",
       "default": "Find My Gift →"
     },
     {
       "type": "text",
       "id": "reset",
-      "label": "reset",
+      "label": "Texto del botón para reiniciar",
       "default": "Start again"
     },
     {
       "type": "text",
       "id": "results_title",
-      "label": "results title",
+      "label": "Título de resultados",
       "default": "Gift Ideas We Love"
     },
     {
       "type": "text",
       "id": "results_subtitle",
-      "label": "results subtitle",
+      "label": "Subtítulo de resultados",
       "default": "A few handpicked favorites, perfect for gifting."
     },
     {
       "type": "text",
       "id": "initial",
-      "label": "initial",
+      "label": "Mensaje antes de buscar",
       "default": "Choose a budget and age to discover a little gift."
     },
     {
       "type": "text",
       "id": "empty",
-      "label": "empty",
+      "label": "Mensaje sin resultados",
       "default": "No little gifts match this selection yet. Try another combination."
     },
     {
       "type": "text",
       "id": "results_count",
-      "label": "results count",
+      "label": "Mensaje de cantidad de resultados ([count])",
       "default": "[count] little gifts found."
     },
     {
       "type": "text",
       "id": "available",
-      "label": "available",
+      "label": "Texto de disponibilidad",
       "default": "Available"
     },
     {
       "type": "text",
       "id": "config_error",
-      "label": "config error",
+      "label": "Mensaje de configuración no disponible",
       "default": "The gift guide is temporarily unavailable. Please try again later."
     },
     {
       "type": "text",
       "id": "no_js",
-      "label": "no js",
+      "label": "Mensaje sin JavaScript",
       "default": "Please enable JavaScript to use the gift guide."
     },
     {
@@ -370,4 +378,5 @@
   ]
 }
 {% endschema %}
+
 
